@@ -5,9 +5,10 @@ Module implementing guahaoDialog.
 """
 
 from PyQt5.QtCore import pyqtSlot,Qt
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem,QMessageBox
 
 from Ui_guahao import Ui_Form
+from db import dbop
 
 
 class guahaoDialog(QWidget, Ui_Form):
@@ -23,6 +24,11 @@ class guahaoDialog(QWidget, Ui_Form):
         """
         super(guahaoDialog, self).__init__(parent)
         self.setupUi(self)
+        self.currentpage = 1  # 当前页数
+        self.totalpages = 1  # 总页数
+        self.load_doctors()
+        self.cnt_pages()
+        self.tableWidget.setEditTriggers(self.tableWidget.NoEditTriggers)
     
     @pyqtSlot()
     def on_pushButton_search_pressed(self):
@@ -90,3 +96,20 @@ class guahaoDialog(QWidget, Ui_Form):
             self.tableWidget.setItem(i, 4, dept_item)
 
             self.tableWidget.resizeColumnsToContents()
+
+
+    def load_doctors(self):
+        """
+        加载第一页医生列表
+        """
+        firstPage = listAllDoctors(0, 20)
+        if firstPage == "connect_error":
+            QMessageBox.warning(self, "警告", "数据库连接失败")
+        elif firstPage == "excute_error":
+            QMessageBox.warning(self, "警告", "数据库查询失败")
+        elif firstPage:
+            self.showTable(firstPage)
+            self.currentpage = 1
+            self.cnt_pages()
+            self.label_cur.setText(str(self.currentpage))
+            self.label_sum.setText(str(self.totalpages))
