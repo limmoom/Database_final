@@ -1,0 +1,44 @@
+2023-05-27 19:38:14,963 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:38:14,963 ERROR   : 参数：1xx
+2023-05-27 19:38:14,985 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:38:14,985 ERROR   : 参数：'1xx'
+2023-05-27 19:38:33,359 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:38:33,360 ERROR   : 参数：'1xx'
+2023-05-27 19:39:25,326 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:39:25,326 ERROR   : 参数：'1xx'
+2023-05-27 19:47:48,573 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:47:48,575 ERROR   : 参数：1xx
+2023-05-27 19:47:48,577 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:47:48,577 ERROR   : 参数：'1xx'
+2023-05-27 19:49:30,034 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:49:30,034 ERROR   : 参数：('1xx',)
+2023-05-27 19:49:30,035 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:49:30,035 ERROR   : 参数：'1xx'
+2023-05-27 19:49:58,682 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:49:58,682 ERROR   : 参数：('1xx',)
+2023-05-27 19:49:58,694 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:49:58,695 ERROR   : 参数：'1xx'
+2023-05-27 19:50:05,389 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:50:05,389 ERROR   : 参数：1xx
+2023-05-27 19:50:05,414 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:50:05,414 ERROR   : 参数：'1xx'
+2023-05-27 19:50:14,073 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:50:14,073 ERROR   : 参数：1xx
+2023-05-27 19:50:21,158 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:50:21,158 ERROR   : 参数：('1xx',)
+2023-05-27 19:50:32,421 ERROR   : 数据库执行失败：select * from `patient` where 'patient_id'= ?
+2023-05-27 19:50:32,421 ERROR   : 参数：('1xx',)
+2023-05-27 19:50:44,972 ERROR   : 数据库执行失败：select * from `patient` where patient_id= ?
+2023-05-27 19:50:44,972 ERROR   : 参数：('1xx',)
+2023-05-27 19:50:48,366 ERROR   : 数据库执行失败：select * from `patient` where patient_id= ?
+2023-05-27 19:50:48,366 ERROR   : 参数：('1xx',)
+2023-05-27 19:50:48,369 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:50:48,369 ERROR   : 参数：'1xx'
+2023-05-27 19:51:31,387 ERROR   : 数据库执行失败：select * from `patient` where patient_id=
+2023-05-27 19:51:31,387 ERROR   : 参数：('1xx',)
+2023-05-27 19:51:31,389 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:51:31,389 ERROR   : 参数：'1xx'
+2023-05-27 19:52:03,226 ERROR   : 数据库执行失败：select * from `patient` where patient_id=
+2023-05-27 19:52:03,226 ERROR   : 参数：('1xx',)
+2023-05-27 19:52:03,229 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
+2023-05-27 19:52:03,229 ERROR   : 参数：'1xx'
