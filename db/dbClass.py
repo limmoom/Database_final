@@ -60,6 +60,7 @@ class dbClass():
             logger.error("执行sql语句时，数据库连接失败")
             return "connect_error"
         try:
+            print(self.cur.mogrify(sql, params))
             if params:
                 self.cur.execute(sql,params)
             else:
@@ -67,7 +68,6 @@ class dbClass():
             if commit:
                 self.conn.commit()
         except:
-            print(self.cur.mogrify(sql, params))
             logger.error("数据库执行失败：" + sql)
             logger.error("参数：" + str(params))
             self.conn.rollback()
@@ -85,6 +85,5 @@ class dbClass():
         if res == "connect_error" or res == "execute_error":
             return res
         else:
-            print(self.cur.mogrify(sql, params))
             return self.cur.fetchall()
 

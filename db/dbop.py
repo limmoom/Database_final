@@ -1,5 +1,6 @@
 import sharedata, dbClass
 import hashlib
+import datetime
 
 db = sharedata.getValue('dbObj')
 
@@ -87,4 +88,34 @@ def addDoctor(username, encrypt_pwd, name, title, dept):
     else:
         return "user_exist"
     return result
+
+def findregdate(patient,doctor):
+    """
+    查找挂号单
+    """
+    sql = "select * from `registration_form` where patient_id=%(patient)s and doctor_id=%(doctor)s order by Registration_date desc"
+    params = {"patient": patient, "doctor": doctor}
+    result = db.query(sql, params)
+    curdate = datetime.datetime.now().date()
+    regdate = result[0][2].date()
+    if curdate == regdate:
+        return "date_same"
+    else:
+        return "date_different"
+
+def guahao(patient,doctor):
+    """
+    挂号
+    """
+    date_ok = findregdate(patient,doctor)
+    if date_ok == "date_same":
+        return "date_same"
+    elif date_ok == "date_different":
+        sql = "insert into `registration_form`(`patient_id`,`doctor_id`) values(%(patient)s,%(doctor)s)"
+        params = {"patient": patient, "doctor": doctor}
+        result = db.execute(sql, params, commit=True)
+        if result == "connect_error" or result == "execute_error":
+            return result
+        return "already_reg"
+
 

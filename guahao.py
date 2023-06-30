@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QWidget, QTableWidgetItem,QMessageBox
 
 from Ui_guahao import Ui_Form
 from db import dbop
+import curuser
 
 
 class guahaoDialog(QWidget, Ui_Form):
@@ -24,27 +25,34 @@ class guahaoDialog(QWidget, Ui_Form):
         """
         super(guahaoDialog, self).__init__(parent)
         self.setupUi(self)
+        self.Init()
         self.currentpage = 1  # 当前页数
         self.totalpages = 1  # 总页数
-        self.load_doctors()
-        self.cnt_pages()
+        self.currentrow = 0  # 当前行数
+        # self.load_doctors()
+        # self.cnt_pages()
         self.tableWidget.setEditTriggers(self.tableWidget.NoEditTriggers)
     
     @pyqtSlot()
     def on_pushButton_search_pressed(self):
         """
-        Slot documentation goes here.
+        搜索
         """
-        # TODO: not implemented yet
-        raise NotImplementedError
+        self.currentpage = 1
+        self.showTablecontent()
 
     @pyqtSlot()
     def on_pushButton_front_pressed(self):
         """
-        Slot documentation goes here.
+        上一页
         """
-        # TODO: not implemented yet
-        raise NotImplementedError
+        self.currentpage -= 1
+        if self.currentpage >= 1:
+            self.label_cur.setText(str(self.currentpage))
+            self.showTablecontent()
+        else:
+            self.currentpage = 1
+            self.pushButton_front.setEnabled(False)
 
     @pyqtSlot()
     def on_pushButton_after_pressed(self):
@@ -61,6 +69,30 @@ class guahaoDialog(QWidget, Ui_Form):
         """
         # TODO: not implemented yet
         raise NotImplementedError
+
+    @pyqtSlot()
+    def on_tableWidget_cellClicked(self, row, column):
+        """
+        选中医生
+        """
+        self.pushButton_guahao.setEnabled(True)
+        self.currentrow = row
+
+    @pyqtSlot()
+    def on_pushbutton_guahao_pressed(self):
+        """
+        挂号
+        """
+        doctorid = self.tableWidget.item(self.currentrow, 0).text()
+        doctorname = self.tableWidget.item(self.currentrow, 1).text()
+        patientid = curuser.getuserid()
+        res = QMessageBox.question(self, "确认", "确认挂%s医生的号？"%doctorname, QMessageBox.Yes | QMessageBox.No)
+        if res == QMessageBox.Yes:
+            guahao = dbop.guahao(patientid, doctorid)
+            if guahao == "already_reg":
+                QMessageBox.information(self, "提示", "挂号成功")
+            elif guahao == "date_same":
+                QMessageBox.warning(self, "警告", "您今日已挂过%s医生的号"%doctorname)
 
     def showTable(self, doctorlist):
         """
@@ -113,3 +145,65 @@ class guahaoDialog(QWidget, Ui_Form):
             self.cnt_pages()
             self.label_cur.setText(str(self.currentpage))
             self.label_sum.setText(str(self.totalpages))
+
+    def Init(self):
+        self.pushButton_guahao.setEnabled(False)
+        self.pushButton_skip(False)
+        self.pushButton_after(False)
+        self.pushButton_front(False)
+
+
+    def showTablecontent(self):
+        '''
+        显示当前表格内容
+        '''
+        searchInfo = self.lineEdit.text()
+        options = self.comboBox.currentText()
+        if searchInfo:
+            if options:
+                self.cnt_pages(options, searchInfo)
+                self.label_cur.setText(str(self.currentpage))
+                self.label_sum.setText(str(self.totalpages))
+                currentDoctorlist = listAllDoctors((self.currentpage - 1) * 20, 20, options, searchInfo)
+                if currentDoctorlist == "connect_error":
+                    QMessageBox.warning(self, "警告", "数据库连接失败")
+                elif currentDoctorlist == "excute_error":
+                    QMessageBox.warning(self, "警告", "数据库查询失败")
+                elif currentDoctorlist:
+                    self.showTable(currentDoctorlist)
+        elif not (searchInfo) and not (options):
+            self.cnt_pages()
+            self.label_cur.setText(str(self.currentpage))
+            self.label_sum.setText(str(self.totalpages))
+            currentDoctorlist = listAllDoctors((self.currentpage - 1) * 20, 20)
+            if currentDoctorlist == "connect_error":
+                QMessageBox.warning(self, "警告", "数据库连接失败")
+            elif currentDoctorlist == "excute_error":
+                QMessageBox.warning(self, "警告", "数据库查询失败")
+
+
+    def cnt_pages(self, options=None, searchInfo=None):
+        '''
+        计算总页数
+        '''
+        page = totalPages(options, searchInfo)
+        if page == "connect_error":
+            QMessageBox.warning(self, "警告", "数据库连接失败")
+            self.totalpages = 1
+        elif page == "excute_error":
+            QMessageBox.warning(self, "警告", "数据库查询失败")
+            self.totalpages = 1
+        elif page:
+            if page[0][0] % 20 == 0:
+                self.totalpages = page[0][0] // 20
+            else:
+                self.totalpages = page[0][0] // 20 + 1
+            if self.currentpage == 1:
+                self.pushButton_front(False)
+            if self.currentpage == self.totalpages:
+                self.pushButton_after(False)
+            if self.currentpage > 1 and self.currentpage < self.totalpages:
+                self.pushButton_front(True)
+                self.pushButton_after(True)
+                self.pushButton_skip(True)
+

@@ -14,3 +14,6 @@ def getcuruser():
 
 def getcurrentopt():
     return _global_dict[-1]
+
+def getuserid():
+    return _global_dict[0]

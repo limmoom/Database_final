@@ -34,3 +34,7 @@
 2023-06-29 19:20:13,609 ERROR   : 执行sql语句时，数据库连接失败
 2023-06-30 17:39:10,826 ERROR   : 数据库连接失败
 2023-06-30 17:39:10,827 ERROR   : 执行sql语句时，数据库连接失败
+2023-07-01 01:22:19,416 ERROR   : 数据库执行失败：insert into `registration_form`(`patient_id`,`doctor_id`) values(%(patient)s,%(doctor)s,)
+2023-07-01 01:22:19,418 ERROR   : 参数：{'patient': '231', 'doctor': '111'}
+2023-07-01 01:23:36,014 ERROR   : 数据库执行失败：insert into `registration_form`(`patient_id`,`doctor_id`) values(%(patient)s,%(doctor)s,)
+2023-07-01 01:23:36,015 ERROR   : 参数：{'patient': '231', 'doctor': '111'}
