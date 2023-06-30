@@ -66,7 +66,7 @@ class regDialog(QDialog, Ui_Dialog):
         self.close()
 
 
-    def checkpwd(self, pwd):
+        def checkpwd(self, pwd):
         '''
         检查密码是否有效
         1 位数大于8位
@@ -74,14 +74,14 @@ class regDialog(QDialog, Ui_Dialog):
         '''
         if len(pwd) < 8:
             return False
-        flag = 0
+        flag_lower, flag_upper, flag_digit = 0, 0, 0
         for i in pwd:
             if i.islower():
-                flag += 1
+                flag_lower = 1
             elif i.isupper():
-                flag += 1
+                flag_upper = 1
             elif i.isdigit():
-                flag += 1
-            if flag == 3:
+                flag_digit = 1
+            if flag_lower != 0 and flag_upper != 0 and flag_digit != 0:
                 return True
         return False
