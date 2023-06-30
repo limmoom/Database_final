@@ -118,4 +118,48 @@ def guahao(patient,doctor):
             return result
         return "already_reg"
 
+def listAllDoctors(currentPage, numPage, options='',searchinfo=''):
+    '''
+    列出所有医生
+    :param currentPage: 当前页码
+    :param numPage: 总的页数
+    :param keyword: 关键词
+    :return:
+    '''
+    if not options:
+        sql = "select * from `doctor` limit %(cur)s, %(nxt)s"
+        params = {"cur": currentPage, "nxt": numPage}
+    elif options == '医生科室':
+        sql = "select * from `doctor` where doctor_dept=%(dept)s limit %(cur)s, %(nxt)s"
+        params = {"dept": searchinfo, "cur": currentPage, "nxt": numPage}
+    elif options == '医生职称':
+        sql = "select * from `doctor` where doctor_title=%(title)s limit %(cur)s, %(nxt)s"
+        params = {"title": searchinfo, "cur": currentPage, "nxt": numPage}
+    elif options == '医生姓名':
+        sql = "select * from `doctor` where doctor_name=%(name)s limit %(cur)s, %(nxt)s"
+        params = {"name": searchinfo, "cur": currentPage, "nxt": numPage}
+    elif options == '医生编号':
+        sql = "select * from `doctor` where doctor_id=%(id)s limit %(cur)s, %(nxt)s"
+        params = {"id": searchinfo, "cur": currentPage, "nxt": numPage}
+    result = db.query(sql, params)
+    return result
+
+def totalPages(options, searchInfo):
+    if options == '医生科室':
+        sql = "select count(*) from `doctor` where doctor_dept=%(dept)s"
+        params = {"dept": searchInfo}
+    elif options == '医生职称':
+        sql = "select count(*) from `doctor` where doctor_title=%(title)s"
+        params = {"title": searchInfo}
+    elif options == '医生姓名':
+        sql = "select count(*) from `doctor` where doctor_name=%(name)s"
+        params = {"name": searchInfo}
+    elif options == '医生编号':
+        sql = "select count(*) from `doctor` where doctor_id=%(id)s"
+        params = {"id": searchInfo}
+    else:
+        sql = "select count(*) from `doctor`"
+        params = {}
+    result = db.query(sql, params)
+    return result
 

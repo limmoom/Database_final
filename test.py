@@ -31,4 +31,22 @@ def findregform(patient,doctor):
         else:
             print("buxiangtong")
 
-findregform('231','111')
+# findregform('231','111')
+
+def totalPages(options, searchInfo):
+    if options == '医生科室':
+        sql = "select count(*) from `doctor` where doctor_dept=%(dept)s"
+        params = {"dept": searchInfo}
+    elif options == '医生职称':
+        sql = "select count(*) from `doctor` where doctor_title=%(title)s"
+        params = {"title": searchInfo}
+    elif options == '医生姓名':
+        sql = "select count(*) from `doctor` where doctor_name=%(name)s"
+        params = {"name": searchInfo}
+    elif options == '医生编号':
+        sql = "select count(*) from `doctor` where doctor_id=%(id)s"
+        params = {"id": searchInfo}
+    result = db.query(sql, params)
+    return result[0][0]
+
+print(totalPages('医生科室','测试科室1'))
