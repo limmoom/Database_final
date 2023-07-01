@@ -19,7 +19,7 @@ class guahaoDialog(QWidget, Ui_Form):
     def __init__(self, parent=None):
         """
         Constructor
-        
+
         @param parent reference to the parent widget
         @type QWidget
         """
@@ -32,7 +32,7 @@ class guahaoDialog(QWidget, Ui_Form):
         self.load_doctors()
         self.cnt_pages()
         self.tableWidget.setEditTriggers(self.tableWidget.NoEditTriggers)
-    
+
     @pyqtSlot()
     def on_pushButton_search_pressed(self):
         """
@@ -65,6 +65,7 @@ class guahaoDialog(QWidget, Ui_Form):
         if self.currentpage <= self.totalpages:
             self.label_cur.setText(str(self.currentpage))
             self.showTablecontent()
+            self.pushButton_front.setEnabled(True)
             if self.currentpage == self.totalpages:
                 self.pushButton_after.setEnabled(False)
         else:
@@ -79,6 +80,8 @@ class guahaoDialog(QWidget, Ui_Form):
         goPage = self.spinBox.value()
         if goPage > self.totalpages:
             QMessageBox.warning(self, "警告", "超出页数范围")
+        elif goPage < 1:
+            QMessageBox.warning(self, "警告", "页数不能小于1")
         else:
             self.currentpage = goPage
             self.label_cur.setText(str(self.currentpage))
@@ -91,34 +94,36 @@ class guahaoDialog(QWidget, Ui_Form):
             elif goPage == 1 and goPage == self.totalpages:
                 self.pushButton_front.setEnabled(False)
                 self.pushButton_after.setEnabled(False)
-            elif goPage > 1 and goPage < self.totalpages:
+            elif 1 < goPage < self.totalpages:
                 self.pushButton_front.setEnabled(True)
                 self.pushButton_after.setEnabled(True)
             self.showTablecontent()
 
     @pyqtSlot()
-    def on_tableWidget_cellClicked(self, row, column):
-        """
-        选中医生
-        """
-        self.pushButton_guahao.setEnabled(True)
-        self.currentrow = row
-
-    @pyqtSlot()
-    def on_pushbutton_guahao_pressed(self):
+    def on_pushButton_guahao_pressed(self):
         """
         挂号
         """
         doctorid = self.tableWidget.item(self.currentrow, 0).text()
         doctorname = self.tableWidget.item(self.currentrow, 1).text()
         patientid = curuser.getuserid()
-        res = QMessageBox.question(self, "确认", "确认挂%s医生的号？"%doctorname, QMessageBox.Yes | QMessageBox.No)
+        res = QMessageBox.question(self, "确认", "确认挂%s医生的号？" % doctorname, QMessageBox.Yes | QMessageBox.No)
         if res == QMessageBox.Yes:
             guahao = dbop.guahao(patientid, doctorid)
             if guahao == "already_reg":
                 QMessageBox.information(self, "提示", "挂号成功")
             elif guahao == "date_same":
-                QMessageBox.warning(self, "警告", "您今日已挂过%s医生的号"%doctorname)
+                QMessageBox.warning(self, "警告", "您今日已挂过%s医生的号" % doctorname)
+
+    @pyqtSlot(int, int)
+    def on_tableWidget_cellPressed(self, row, column):
+        """
+        选中医生
+        """
+        self.pushButton_guahao.setEnabled(True)
+        self.currentrow = row
+
+
 
     def showTable(self, doctorlist):
         """
@@ -160,7 +165,7 @@ class guahaoDialog(QWidget, Ui_Form):
         """
         加载第一页医生列表
         """
-        firstPage = dbop.listAllDoctors(0, 20)
+        firstPage = dbop.listAllDoctors(0, 10)
         if firstPage == "connect_error":
             QMessageBox.warning(self, "警告", "数据库连接失败")
         elif firstPage == "excute_error":
@@ -190,7 +195,7 @@ class guahaoDialog(QWidget, Ui_Form):
                 self.cnt_pages(options, searchInfo)
                 self.label_cur.setText(str(self.currentpage))
                 self.label_sum.setText(str(self.totalpages))
-                currentDoctorlist = dbop.listAllDoctors((self.currentpage - 1) * 20, 20, options, searchInfo)
+                currentDoctorlist = dbop.listAllDoctors((self.currentpage - 1) * 10, 10, options, searchInfo)
                 if currentDoctorlist == "connect_error":
                     QMessageBox.warning(self, "警告", "数据库连接失败")
                 elif currentDoctorlist == "excute_error":
@@ -201,7 +206,7 @@ class guahaoDialog(QWidget, Ui_Form):
             self.cnt_pages()
             self.label_cur.setText(str(self.currentpage))
             self.label_sum.setText(str(self.totalpages))
-            currentDoctorlist = dbop.listAllDoctors((self.currentpage - 1) * 20, 20)
+            currentDoctorlist = dbop.listAllDoctors((self.currentpage - 1) * 10, 10)
             if currentDoctorlist == "connect_error":
                 QMessageBox.warning(self, "警告", "数据库连接失败")
             elif currentDoctorlist == "excute_error":
@@ -223,10 +228,10 @@ class guahaoDialog(QWidget, Ui_Form):
             QMessageBox.warning(self, "警告", "数据库查询失败")
             self.totalpages = 1
         elif page:
-            if page[0][0] % 20 == 0:
-                self.totalpages = page[0][0] // 20
+            if page[0][0] % 11 == 0:
+                self.totalpages = page[0][0] // 10
             else:
-                self.totalpages = page[0][0] // 20 + 1
+                self.totalpages = page[0][0] // 10 + 1
             if self.currentpage == 1:
                 self.pushButton_front.setEnabled(False)
             if self.currentpage == self.totalpages:
@@ -235,4 +240,7 @@ class guahaoDialog(QWidget, Ui_Form):
                 self.pushButton_front.setEnabled(True)
                 self.pushButton_after.setEnabled(True)
                 self.pushButton_skip.setEnabled(True)
+            if self.totalpages > 1:
+                self.pushButton_skip.setEnabled(True)
+                self.pushButton_after.setEnabled(True)
 

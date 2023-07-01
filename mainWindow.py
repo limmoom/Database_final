@@ -9,7 +9,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow
 
 from Ui_mainWindow import Ui_MainWindow
-from db import dbop
+from jiaohao import jiaohaoDialog
 from guahao import guahaoDialog
 import curuser
 
@@ -32,7 +32,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_actionguahao_2_triggered(self):
         """
-        Slot documentation goes here.
+        患者挂号
         """
         guahao = guahaoDialog(self)
         self.setCentralWidget(guahao)
@@ -56,10 +56,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_actionjiaohao_triggered(self):
         """
-        Slot documentation goes here.
+        医生叫号
         """
-        # TODO: not implemented yet
-        raise NotImplementedError
+        jiaohao = jiaohaoDialog(self)
+        self.setCentralWidget(jiaohao)
+
     
     @pyqtSlot()
     def on_actionkaiyao_triggered(self):

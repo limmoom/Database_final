@@ -4,6 +4,7 @@ import datetime
 
 db = sharedata.getValue('dbObj')
 
+
 def findPatient(usr):
     """
     查找用户
@@ -16,6 +17,7 @@ def findPatient(usr):
     else:
         return "no_user"
 
+
 def findDoctor(usr):
     """
     查找医生
@@ -27,6 +29,7 @@ def findDoctor(usr):
         return result
     else:
         return "no_user"
+
 
 def pwdEncryption(pwd):
     """
@@ -41,7 +44,8 @@ def pwdEncryption(pwd):
     # 返回加密后的密码
     return hashed_password
 
-def addPatient(usr,pwd,name,id,phone):
+
+def addPatient(usr, pwd, name, id, phone):
     """
     添加用户
     """
@@ -57,6 +61,7 @@ def addPatient(usr,pwd,name,id,phone):
     else:
         return "user exists"
     return result
+
 
 def findfee(title):
     """
@@ -81,7 +86,7 @@ def addDoctor(username, encrypt_pwd, name, title, dept):
         return result_name
     elif result_name == "no_user":
         sql = "insert into `doctor` values(%(username)s,%(name)s,%(title)s,%(fee)s,%(pwd)s,%(dept)s)"
-        params = {"username": username, "pwd": encrypt_pwd, "name": name, "title": title, "dept": dept,"fee":fee}
+        params = {"username": username, "pwd": encrypt_pwd, "name": name, "title": title, "dept": dept, "fee": fee}
         result = db.execute(sql, params, commit=True)
         if result == "connect_error" or result == "execute_error":
             return result
@@ -89,13 +94,16 @@ def addDoctor(username, encrypt_pwd, name, title, dept):
         return "user_exist"
     return result
 
-def findregdate(patient,doctor):
+
+def findregdate(patient, doctor):
     """
     查找挂号单
     """
     sql = "select * from `registration_form` where patient_id=%(patient)s and doctor_id=%(doctor)s order by Registration_date desc"
     params = {"patient": patient, "doctor": doctor}
     result = db.query(sql, params)
+    if not result:
+        return "date_different"
     curdate = datetime.datetime.now().date()
     regdate = result[0][2].date()
     if curdate == regdate:
@@ -103,11 +111,12 @@ def findregdate(patient,doctor):
     else:
         return "date_different"
 
-def guahao(patient,doctor):
+
+def guahao(patient, doctor):
     """
     挂号
     """
-    date_ok = findregdate(patient,doctor)
+    date_ok = findregdate(patient, doctor)
     if date_ok == "date_same":
         return "date_same"
     elif date_ok == "date_different":
@@ -118,7 +127,8 @@ def guahao(patient,doctor):
             return result
         return "already_reg"
 
-def listAllDoctors(currentPage, numPage, options='',searchinfo=''):
+
+def listAllDoctors(currentPage, numPage, options='', searchinfo=''):
     '''
     列出所有医生
     :param currentPage: 当前页码
@@ -144,6 +154,7 @@ def listAllDoctors(currentPage, numPage, options='',searchinfo=''):
     result = db.query(sql, params)
     return result
 
+
 def totalPages(options, searchInfo):
     if options == '医生科室':
         sql = "select count(*) from `doctor` where doctor_dept=%(dept)s"
@@ -163,3 +174,38 @@ def totalPages(options, searchInfo):
     result = db.query(sql, params)
     return result
 
+
+def totalpatPages(docid):
+    sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = False"
+    params = {"docid": docid}
+    result = db.query(sql, params)
+    return result
+
+
+def listAllPatients(currentPage, numPage, docid):
+    '''
+    列出所有患者
+    :param currentPage: 当前页码
+    :param numPage: 总的页数
+    :param keyword: 关键词
+    :return:
+    '''
+    result = []
+    sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= False limit %(cur)s, %(nxt)s"
+    params1 = {"docid": docid, "cur": currentPage, "nxt": numPage}
+    result1 = db.query(sql1, params1)
+    patientid = [i[1] for i in result1]
+    for i in range(len(patientid)):
+        sql2 = "select * from `patient` where patient_id=%(id)s"
+        params2 = {"id": patientid[i]}
+        result2 = db.query(sql2, params2)
+        result.append((result2[0][0],result2[0][1],result1[i][2],result2[0][2]))
+    return result
+
+def jiaohao(docid,patid,regdate):
+    sql = "update `registration_form` set already = True where doctor_id=%(docid)s and patient_id=%(patid)s and Registration_date=%(regdate)s"
+    params = {"docid": docid, "patid": patid, "regdate": regdate}
+    result = db.execute(sql, params, commit=True)
+    if result == "connect_error" or result == "execute_error":
+        return result
+    return "already_jiaohao"

@@ -38,3 +38,13 @@
 2023-07-01 01:22:19,418 ERROR   : 参数：{'patient': '231', 'doctor': '111'}
 2023-07-01 01:23:36,014 ERROR   : 数据库执行失败：insert into `registration_form`(`patient_id`,`doctor_id`) values(%(patient)s,%(doctor)s,)
 2023-07-01 01:23:36,015 ERROR   : 参数：{'patient': '231', 'doctor': '111'}
+2023-07-01 12:44:38,226 ERROR   : 数据库执行失败：select * from `doctor` limit %(cur)s, %(nxt)s
+2023-07-01 12:44:38,229 ERROR   : 参数：{'cur': -11, 'nxt': 11}
+2023-07-01 12:44:55,138 ERROR   : 数据库执行失败：select * from `doctor` limit %(cur)s, %(nxt)s
+2023-07-01 12:44:55,139 ERROR   : 参数：{'cur': -11, 'nxt': 11}
+2023-07-01 17:45:29,153 ERROR   : 数据库执行失败：select * from `registration_form` where doctor_id=%(docid)s limit %(cur)s, %(nxt)s and already = False
+2023-07-01 17:45:29,154 ERROR   : 参数：{'docid': '111', 'cur': 0, 'nxt': 10}
+2023-07-01 17:45:57,278 ERROR   : 数据库执行失败：select * from `registration_form` where doctor_id=%(docid)s limit %(cur)s, %(nxt)s and already = False
+2023-07-01 17:45:57,279 ERROR   : 参数：{'docid': '111', 'cur': 0, 'nxt': 10}
+2023-07-01 17:46:46,863 ERROR   : 数据库执行失败：select * from `registration_form` where doctor_id=%(docid)s limit %(cur)s, %(nxt)s and already = False
+2023-07-01 17:46:46,864 ERROR   : 参数：{'docid': '111', 'cur': 0, 'nxt': 10}
