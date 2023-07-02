@@ -72,14 +72,9 @@ class regdocDialog(QDialog, Ui_Dialog):
         '''
         if len(pwd) < 8:
             return False
-        flag = 0
-        for i in pwd:
-            if i.islower():
-                flag += 1
-            elif i.isupper():
-                flag += 1
-            elif i.isdigit():
-                flag += 1
-            if flag == 3:
-                return True
-        return False
+
+        has_lowercase = any(c.islower() for c in pwd)
+        has_uppercase = any(c.isupper() for c in pwd)
+        has_digit = any(c.isdigit() for c in pwd)
+
+        return has_lowercase and has_uppercase and has_digit

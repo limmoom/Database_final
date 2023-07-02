@@ -66,3 +66,7 @@
 2023-07-02 04:44:19,601 ERROR   : 参数：{'medid': '002'}
 2023-07-02 04:44:38,125 ERROR   : 数据库执行失败：select * from `medicial` where `medicine_id` = %(medid)s
 2023-07-02 04:44:38,125 ERROR   : 参数：{'medid': '002'}
+2023-07-02 10:33:07,680 ERROR   : 数据库执行失败：select * from `medicial_orders` where `patient_id` = %(patid)s
+2023-07-02 10:33:07,680 ERROR   : 参数：{'patid': '1'}
+2023-07-02 10:33:38,639 ERROR   : 数据库执行失败：insert into `doctor` values(%(username)s,%(name)s,%(title)s,%(fee)s,%(pwd)s,%(dept)s)
+2023-07-02 10:33:38,639 ERROR   : 参数：{'username': '1', 'pwd': 'b526c18c2f113cce8ecbea588f775eae6aec67a5275b367dc59b5a44c5acc5e9', 'name': '1', 'title': '主治医师', 'dept': 'temp', 'fee': ((100,),)}

@@ -86,7 +86,7 @@ def addDoctor(username, encrypt_pwd, name, title, dept):
     if result_name == "connect_error" or result_name == "execute_error":
         return result_name
     elif result_name == "no_user":
-        sql = "insert into `doctor` values(%(username)s,%(name)s,%(title)s,%(fee)s,%(pwd)s,%(dept)s)"
+        sql = "insert into `doctor` values(%(username)s,%(name)s,%(title)s,%(fee)s,%(dept)s,%(pwd)s)"
         params = {"username": username, "pwd": encrypt_pwd, "name": name, "title": title, "dept": dept, "fee": fee}
         result = db.execute(sql, params, commit=True)
         if result == "connect_error" or result == "execute_error":
@@ -200,10 +200,11 @@ def listAllPatients(currentPage, numPage, docid):
         sql2 = "select * from `patient` where patient_id=%(id)s"
         params2 = {"id": patientid[i]}
         result2 = db.query(sql2, params2)
-        result.append((result2[0][0],result2[0][1],result1[i][2],result2[0][2]))
+        result.append((result2[0][0], result2[0][1], result1[i][2], result2[0][2]))
     return result
 
-def jiaohao(docid,patid,regdate):
+
+def jiaohao(docid, patid, regdate):
     sql = "update `registration_form` set already = True where doctor_id=%(docid)s and patient_id=%(patid)s and Registration_date=%(regdate)s"
     params = {"docid": docid, "patid": patid, "regdate": regdate}
     result = db.execute(sql, params, commit=True)
@@ -211,7 +212,8 @@ def jiaohao(docid,patid,regdate):
         return result
     return "already_jiaohao"
 
-def listAllPatients_already(currentPage, numPage, docid, options="", searchInfo = ''):
+
+def listAllPatients_already(currentPage, numPage, docid, options="", searchInfo=''):
     result = []
     if not options:
         sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= True limit %(cur)s, %(nxt)s"
@@ -236,21 +238,22 @@ def listAllPatients_already(currentPage, numPage, docid, options="", searchInfo 
     return result
 
 
-def totalpatPages_already(docid,options,searchInfo):
+def totalpatPages_already(docid, options, searchInfo):
     if options == '患者姓名':
         sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id in (select patient_id from `patient` where patient_name = %(name)s)"
-        params = {"docid": docid,"name":searchInfo}
+        params = {"docid": docid, "name": searchInfo}
     elif options == '患者病历卡号':
         sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id = %(id)s"
-        params = {"docid": docid,"id":searchInfo}
+        params = {"docid": docid, "id": searchInfo}
     elif options == '患者身份证号':
         sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id in (select patient_id from `patient` where patient_idnumber = %(idcard)s)"
-        params = {"docid": docid,"idcard":searchInfo}
+        params = {"docid": docid, "idcard": searchInfo}
     else:
         sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True"
         params = {"docid": docid}
     result = db.query(sql, params)
     return result
+
 
 def listAllmedicines(currentPage, numPage, options="", searchInfo=""):
     '''
@@ -272,7 +275,8 @@ def listAllmedicines(currentPage, numPage, options="", searchInfo=""):
     result = db.query(sql, params)
     return result
 
-def totalmedicinePages(options,searchInfo):
+
+def totalmedicinePages(options, searchInfo):
     if options == '药品名':
         sql = "select count(*) from `medicine` where medicine_name = %(name)s"
         params = {"name": searchInfo}
@@ -285,40 +289,43 @@ def totalmedicinePages(options,searchInfo):
     result = db.query(sql, params)
     return result
 
-def phconfirm(medid,info,docid):
+
+def phconfirm(medid, info, docid):
     params = {"medid": medid}
     sql_pre = "select `medicine_stock` from `medicine` where `medicine_id` = %(medid)s"
-    stock = db.query(sql_pre,params)[0][0]
+    stock = db.query(sql_pre, params)[0][0]
     if stock > 0:
         sql = "update `medicine` set `medicine_stock` = `medicine_stock` - 1 where `medicine_id` = %(medid)s"
-        db.execute(sql,params,commit=True)
+        db.execute(sql, params, commit=True)
     else:
         return "stock_error"
     sql_nxt = "insert into `medicial_orders` (`medicine_id`,`patient_id`,`text`,`doctor_id`) values (%(medid)s,%(patid)s,%(text)s,%(docid)s)"
-    params_nxt = {"medid":medid,"patid":curuser.getpatientid(),"text":info,"docid":docid}
-    res = db.execute(sql_nxt,params_nxt,commit=True)
+    params_nxt = {"medid": medid, "patid": curuser.getpatientid(), "text": info, "docid": docid}
+    res = db.execute(sql_nxt, params_nxt, commit=True)
     if res == "execute_error" or res == "connect_error":
         return res
     else:
         return "success"
 
+
 def listAllPatMedicine(patid):
     res = []
     sql = "select * from `medicial_orders` where `patient_id` = %(patid)s"
-    params = {"patid":patid}
-    result = db.query(sql,params)
+    params = {"patid": patid}
+    result = db.query(sql, params)
     for order in result:
         medid = order[1]
         docid = order[4]
         sql_med = "select * from `medicine` where `medicine_id` = %(medid)s"
-        params_med = {"medid":medid}
-        result_med = db.query(sql_med,params_med)
+        params_med = {"medid": medid}
+        result_med = db.query(sql_med, params_med)
         sql_doc = "select `doctor_name` from `doctor` where `doctor_id` = %(docid)s"
-        params_doc = {"docid":docid}
-        result_doc = db.query(sql_doc,params_doc)
+        params_doc = {"docid": docid}
+        result_doc = db.query(sql_doc, params_doc)
         phid = result_med[0][0]
         sql_ph = "select `pharmacy_name` from `pharmacy` where `pharmacy_id` = %(phid)s"
-        params_ph = {"phid":phid}
-        result_ph = db.query(sql_ph,params_ph)
-        res.append((result_doc[0][0],docid,result_med[0][2],medid,result_med[0][3],result_ph[0][0],order[3],order[5]))
+        params_ph = {"phid": phid}
+        result_ph = db.query(sql_ph, params_ph)
+        res.append(
+            (result_doc[0][0], docid, result_med[0][2], medid, result_med[0][3], result_ph[0][0], order[3], order[5]))
     return res
