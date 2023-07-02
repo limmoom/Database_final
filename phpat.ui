@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>566</width>
+    <height>399</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QTableWidget" name="tableWidget">
+     <column>
+      <property name="text">
+       <string>医生姓名</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>医生编号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>药品名称</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>药品编号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>药品价格</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>所在药房</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>医嘱</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>医嘱时间</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

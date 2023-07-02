@@ -2,6 +2,7 @@ import pymysql
 import logging
 import os
 import sys
+from typing import TypeVar
 
 # 加入日志
 # 获取logger实例
@@ -26,11 +27,46 @@ class dbClass():
         self.conn = None
         self.cur = None
 
-    def connectdb(self):
+    def __del__(self):
+        try:
+            # 关闭游标对象
+            if self.cur is not None:
+                self.cur.close()
+        except:
+            pass
+
+        try:
+            # 关闭数据库连接
+            if self.conn is not None:
+                self.conn.close()
+        except:
+            pass
+
+    def init_db(self):
         try:
             self.conn = pymysql.connect(host='127.0.0.1'  # 连接名称，默认127.0.0.1
                                         , user='root'  # 用户名
-                                        , passwd='shan030209'  # 密码
+                                        , passwd='zeta'  # 密码
+                                        , port=3306  # 端口，默认为3306
+                                        , charset='utf8'  # 字符编码
+                                        )
+            self.cur = self.conn.cursor()  # 生成游标对象
+
+            sql = "CREATE DATABASE IF NOT EXISTS hospital"
+            self.cur.execute(sql)
+            return True
+        except:
+            logger.error("数据库连接失败")
+            return False
+
+    def connectdb(self):
+
+        passwd = ""  # 在这里填写密码
+
+        try:
+            self.conn = pymysql.connect(host='127.0.0.1'  # 连接名称，默认127.0.0.1
+                                        , user='root'  # 用户名
+                                        , passwd=passwd  # 密码
                                         , port=3306  # 端口，默认为3306
                                         , db='hospital'  # 数据库名称
                                         , charset='utf8'  # 字符编码
@@ -38,6 +74,8 @@ class dbClass():
             self.cur = self.conn.cursor()  # 生成游标对象
             return True
         except:
+
+            assert passwd != "", "需要填写本地数据库密码"
             logger.error("数据库连接失败")
             return False
 
@@ -46,6 +84,9 @@ class dbClass():
             self.cur.close()
             self.conn.close()
             return True
+
+    def commit(self):
+        self.conn.commit()
 
     def execute(self, sql, params=None, commit=False):
         '''
@@ -60,14 +101,15 @@ class dbClass():
             logger.error("执行sql语句时，数据库连接失败")
             return "connect_error"
         try:
-            print(self.cur.mogrify(sql, params))
             if params:
-                self.cur.execute(sql,params)
+                self.cur.execute(sql, params)
             else:
                 self.cur.execute(sql)
             if commit:
                 self.conn.commit()
-        except:
+        except Exception as e:
+            print(e)
+            print(self.cur.mogrify(sql, params))
             logger.error("数据库执行失败：" + sql)
             logger.error("参数：" + str(params))
             self.conn.rollback()
@@ -75,15 +117,14 @@ class dbClass():
             return "execute_error"
 
     def query(self, sql, params=None):
-        '''
+        """
         查询
         :param sql: sql语句
         :param params: sql语句中的参数
         :return:
-        '''
+        """
         res = self.execute(sql, params)
         if res == "connect_error" or res == "execute_error":
             return res
         else:
             return self.cur.fetchall()
-
