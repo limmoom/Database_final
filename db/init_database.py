@@ -24,7 +24,7 @@ def _init_database():
         `doctor_name` VARCHAR(20),
         `doctor_title` varchar(20),
         `doctor_fee` INT,
-        `doctor_dept` varchar(20)
+        `doctor_dept` varchar(20),
         `doctor_pwd` varchar(100)
     );
         ''',
@@ -34,7 +34,7 @@ create table `patient`(
     `patient_name` varchar(20),
     `patient_idnumber` varchar(20),
     `patient_telephone` varchar(20),
-    `patient_money` INT default 500
+    `patient_money` INT default 500,
     `patient_pwd` varchar(100)
 );
         ''',
@@ -50,18 +50,17 @@ create table `patient`(
 #     ''',
         '''
 create table `pharmacy`(
-	`pharmacy_id` int primary key auto_increment
+	`pharmacy_id` int primary key auto_increment,
     `pharmacy_name` varchar(20)
 );
     ''',
     '''
 create table `medicine`(
-	`pharmacy_id` int,
-    `medicine_id` varchar(20),
+	`pharmacy_id` int ,
+    `medicine_id` varchar(20) PRIMARY KEY,
     `medicine_name` varchar(20),
     `medicine_price` int,
     `medicine_stock` int,
-    primary key `medicine_id`,
     foreign key(`pharmacy_id`) references `pharmacy`(`pharmacy_id`) on delete cascade
 );
     ''',
@@ -119,7 +118,7 @@ def init_database():
         sql = 'select TABLE_NAME from information_schema.tables where table_schema="hospital"'
         result = db.query(sql)
         print(result)
-        if len(result) == 10:  # 已经创建好数据库
+        if len(result) == 7:  # 已经创建好数据库
             return
         else:
             _init_database()

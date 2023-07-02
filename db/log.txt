@@ -42,3 +42,380 @@
 2023-05-27 19:52:03,226 ERROR   : 参数：('1xx',)
 2023-05-27 19:52:03,229 ERROR   : 数据库执行失败：select * from `patient` where patient_id=?
 2023-05-27 19:52:03,229 ERROR   : 参数：'1xx'
+2023-07-02 10:14:09,571 ERROR   : 数据库执行失败：create table `doctor`(
+        `doctor_id` VARCHAR(20) primary key,
+        `doctor_name` VARCHAR(20),
+        `doctor_title` varchar(20),
+        `doctor_fee` INT,
+        `doctor_dept` varchar(20)
+        `doctor_pwd` varchar(100)
+    );
+        
+2023-07-02 10:14:09,574 ERROR   : 参数：None
+2023-07-02 10:14:09,577 ERROR   : 数据库执行失败：
+create table `patient`(
+	`patient_id` VARCHAR(20) primary key,
+    `patient_name` varchar(20),
+    `patient_idnumber` varchar(20),
+    `patient_telephone` varchar(20),
+    `patient_money` INT default 500
+    `patient_pwd` varchar(100)
+);
+        
+2023-07-02 10:14:09,577 ERROR   : 参数：None
+2023-07-02 10:14:09,602 ERROR   : 数据库执行失败：
+create table `pharmacy`(
+	`pharmacy_id` int primary key auto_increment
+    `pharmacy_name` varchar(20)
+);
+    
+2023-07-02 10:14:09,602 ERROR   : 参数：None
+2023-07-02 10:14:09,617 ERROR   : 数据库执行失败：
+create table `medicine`(
+	`pharmacy_id` int,
+    `medicine_id` varchar(20),
+    `medicine_name` varchar(20),
+    `medicine_price` int,
+    `medicine_stock` int,
+    primary key `medicine_id`,
+    foreign key(`pharmacy_id`) references `pharmacy`(`pharmacy_id`) on delete cascade
+);
+    
+2023-07-02 10:14:09,617 ERROR   : 参数：None
+2023-07-02 10:14:09,664 ERROR   : 数据库执行失败：
+create table `registration_form`(
+	`Registration_id` int primary key auto_increment,
+    `patient_id` varchar(20),
+    `Registration_date` timestamp default current_timestamp,
+    `doctor_id` varchar(20),
+    `already` bool,
+    foreign key(`doctor_id`) references `doctor`(`doctor_id`) on delete cascade,
+	foreign key(`patient_id`) references `patient`(`patient_id`) on delete cascade
+);
+    
+2023-07-02 10:14:09,664 ERROR   : 参数：None
+2023-07-02 10:14:09,668 ERROR   : 数据库执行失败：
+    insert into `pharmacy` (`pharmacy_name`) values ('一药房'),('二药房'),('中药房');
+    
+2023-07-02 10:14:09,668 ERROR   : 参数：None
+2023-07-02 10:14:14,727 ERROR   : 数据库执行失败：
+        create table `title`(
+            `title` varchar(10) primary key,
+            `fee` int 
+        )
+        
+2023-07-02 10:14:14,727 ERROR   : 参数：None
+2023-07-02 10:14:14,729 ERROR   : 数据库执行失败：create table `doctor`(
+        `doctor_id` VARCHAR(20) primary key,
+        `doctor_name` VARCHAR(20),
+        `doctor_title` varchar(20),
+        `doctor_fee` INT,
+        `doctor_dept` varchar(20)
+        `doctor_pwd` varchar(100)
+    );
+        
+2023-07-02 10:14:14,729 ERROR   : 参数：None
+2023-07-02 10:14:14,731 ERROR   : 数据库执行失败：
+create table `patient`(
+	`patient_id` VARCHAR(20) primary key,
+    `patient_name` varchar(20),
+    `patient_idnumber` varchar(20),
+    `patient_telephone` varchar(20),
+    `patient_money` INT default 500
+    `patient_pwd` varchar(100)
+);
+        
+2023-07-02 10:14:14,731 ERROR   : 参数：None
+2023-07-02 10:14:14,734 ERROR   : 数据库执行失败：
+create table `pharmacy`(
+	`pharmacy_id` int primary key auto_increment
+    `pharmacy_name` varchar(20)
+);
+    
+2023-07-02 10:14:14,734 ERROR   : 参数：None
+2023-07-02 10:14:14,736 ERROR   : 数据库执行失败：
+create table `medicine`(
+	`pharmacy_id` int,
+    `medicine_id` varchar(20),
+    `medicine_name` varchar(20),
+    `medicine_price` int,
+    `medicine_stock` int,
+    primary key `medicine_id`,
+    foreign key(`pharmacy_id`) references `pharmacy`(`pharmacy_id`) on delete cascade
+);
+    
+2023-07-02 10:14:14,736 ERROR   : 参数：None
+2023-07-02 10:14:14,742 ERROR   : 数据库执行失败：
+CREATE TABLE `medical_orders` (
+  `medical_ordersid` INT PRIMARY KEY auto_increment,
+  `medicine_id` varchar(20),
+  `patient_id` varchar(20),
+  `text` TEXT,
+  `doctor_id` varchar(20) NOT NULL,
+  `order_date` timestamp default current_timestamp
+);
+    
+2023-07-02 10:14:14,742 ERROR   : 参数：None
+2023-07-02 10:14:14,746 ERROR   : 数据库执行失败：
+create table `registration_form`(
+	`Registration_id` int primary key auto_increment,
+    `patient_id` varchar(20),
+    `Registration_date` timestamp default current_timestamp,
+    `doctor_id` varchar(20),
+    `already` bool,
+    foreign key(`doctor_id`) references `doctor`(`doctor_id`) on delete cascade,
+	foreign key(`patient_id`) references `patient`(`patient_id`) on delete cascade
+);
+    
+2023-07-02 10:14:14,746 ERROR   : 参数：None
+2023-07-02 10:14:14,750 ERROR   : 数据库执行失败：
+    insert into `pharmacy` (`pharmacy_name`) values ('一药房'),('二药房'),('中药房');
+    
+2023-07-02 10:14:14,750 ERROR   : 参数：None
+2023-07-02 10:14:14,771 ERROR   : 数据库执行失败：
+    insert into `title` values('主任医师','400'),('副主任医师','200'),('主治医师','100'),('住院医师','50');
+    
+2023-07-02 10:14:14,771 ERROR   : 参数：None
+2023-07-02 10:15:52,211 ERROR   : 数据库执行失败：
+        create table `title`(
+            `title` varchar(10) primary key,
+            `fee` int 
+        )
+        
+2023-07-02 10:15:52,211 ERROR   : 参数：None
+2023-07-02 10:15:52,227 ERROR   : 数据库执行失败：create table `doctor`(
+        `doctor_id` VARCHAR(20) primary key,
+        `doctor_name` VARCHAR(20),
+        `doctor_title` varchar(20),
+        `doctor_fee` INT,
+        `doctor_dept` varchar(20)
+        `doctor_pwd` varchar(100)
+    );
+        
+2023-07-02 10:15:52,227 ERROR   : 参数：None
+2023-07-02 10:15:52,241 ERROR   : 数据库执行失败：
+create table `patient`(
+	`patient_id` VARCHAR(20) primary key,
+    `patient_name` varchar(20),
+    `patient_idnumber` varchar(20),
+    `patient_telephone` varchar(20),
+    `patient_money` INT default 500
+    `patient_pwd` varchar(100)
+);
+        
+2023-07-02 10:15:52,242 ERROR   : 参数：None
+2023-07-02 10:15:52,272 ERROR   : 数据库执行失败：
+create table `medicine`(
+	`pharmacy_id` int,
+    `medicine_id` varchar(20),
+    `medicine_name` varchar(20),
+    `medicine_price` int,
+    `medicine_stock` int,
+    primary key `medicine_id`,
+    foreign key(`pharmacy_id`) references `pharmacy`(`pharmacy_id`) on delete cascade
+);
+    
+2023-07-02 10:15:52,272 ERROR   : 参数：None
+2023-07-02 10:15:52,289 ERROR   : 数据库执行失败：
+CREATE TABLE `medical_orders` (
+  `medical_ordersid` INT PRIMARY KEY auto_increment,
+  `medicine_id` varchar(20),
+  `patient_id` varchar(20),
+  `text` TEXT,
+  `doctor_id` varchar(20) NOT NULL,
+  `order_date` timestamp default current_timestamp
+);
+    
+2023-07-02 10:15:52,289 ERROR   : 参数：None
+2023-07-02 10:15:52,292 ERROR   : 数据库执行失败：
+create table `registration_form`(
+	`Registration_id` int primary key auto_increment,
+    `patient_id` varchar(20),
+    `Registration_date` timestamp default current_timestamp,
+    `doctor_id` varchar(20),
+    `already` bool,
+    foreign key(`doctor_id`) references `doctor`(`doctor_id`) on delete cascade,
+	foreign key(`patient_id`) references `patient`(`patient_id`) on delete cascade
+);
+    
+2023-07-02 10:15:52,292 ERROR   : 参数：None
+2023-07-02 10:15:52,317 ERROR   : 数据库执行失败：
+    insert into `title` values('主任医师','400'),('副主任医师','200'),('主治医师','100'),('住院医师','50');
+    
+2023-07-02 10:15:52,317 ERROR   : 参数：None
+2023-07-02 10:16:19,866 ERROR   : 数据库执行失败：
+        create table `title`(
+            `title` varchar(10) primary key,
+            `fee` int 
+        )
+        
+2023-07-02 10:16:19,866 ERROR   : 参数：None
+2023-07-02 10:16:19,920 ERROR   : 数据库执行失败：
+create table `pharmacy`(
+	`pharmacy_id` int primary key auto_increment,
+    `pharmacy_name` varchar(20)
+);
+    
+2023-07-02 10:16:19,920 ERROR   : 参数：None
+2023-07-02 10:16:19,944 ERROR   : 数据库执行失败：
+create table `medicine`(
+	`pharmacy_id` int,
+    `medicine_id` varchar(20),
+    `medicine_name` varchar(20),
+    `medicine_price` int,
+    `medicine_stock` int,
+    primary key `medicine_id`,
+    foreign key(`pharmacy_id`) references `pharmacy`(`pharmacy_id`) on delete cascade
+);
+    
+2023-07-02 10:16:19,944 ERROR   : 参数：None
+2023-07-02 10:16:19,959 ERROR   : 数据库执行失败：
+CREATE TABLE `medical_orders` (
+  `medical_ordersid` INT PRIMARY KEY auto_increment,
+  `medicine_id` varchar(20),
+  `patient_id` varchar(20),
+  `text` TEXT,
+  `doctor_id` varchar(20) NOT NULL,
+  `order_date` timestamp default current_timestamp
+);
+    
+2023-07-02 10:16:19,960 ERROR   : 参数：None
+2023-07-02 10:16:20,046 ERROR   : 数据库执行失败：
+    insert into `title` values('主任医师','400'),('副主任医师','200'),('主治医师','100'),('住院医师','50');
+    
+2023-07-02 10:16:20,046 ERROR   : 参数：None
+2023-07-02 10:19:09,830 ERROR   : 数据库执行失败：
+        create table `title`(
+            `title` varchar(10) primary key,
+            `fee` int 
+        )
+        
+2023-07-02 10:19:09,830 ERROR   : 参数：None
+2023-07-02 10:19:09,847 ERROR   : 数据库执行失败：create table `doctor`(
+        `doctor_id` VARCHAR(20) primary key,
+        `doctor_name` VARCHAR(20),
+        `doctor_title` varchar(20),
+        `doctor_fee` INT,
+        `doctor_dept` varchar(20),
+        `doctor_pwd` varchar(100)
+    );
+        
+2023-07-02 10:19:09,847 ERROR   : 参数：None
+2023-07-02 10:19:09,861 ERROR   : 数据库执行失败：
+create table `patient`(
+	`patient_id` VARCHAR(20) primary key,
+    `patient_name` varchar(20),
+    `patient_idnumber` varchar(20),
+    `patient_telephone` varchar(20),
+    `patient_money` INT default 500,
+    `patient_pwd` varchar(100)
+);
+        
+2023-07-02 10:19:09,862 ERROR   : 参数：None
+2023-07-02 10:19:09,876 ERROR   : 数据库执行失败：
+create table `pharmacy`(
+	`pharmacy_id` int primary key auto_increment,
+    `pharmacy_name` varchar(20)
+);
+    
+2023-07-02 10:19:09,876 ERROR   : 参数：None
+2023-07-02 10:19:09,954 ERROR   : 数据库执行失败：
+CREATE TABLE `medical_orders` (
+  `medical_ordersid` INT PRIMARY KEY auto_increment,
+  `medicine_id` varchar(20),
+  `patient_id` varchar(20),
+  `text` TEXT,
+  `doctor_id` varchar(20) NOT NULL,
+  `order_date` timestamp default current_timestamp
+);
+    
+2023-07-02 10:19:09,954 ERROR   : 参数：None
+2023-07-02 10:19:09,957 ERROR   : 数据库执行失败：
+create table `registration_form`(
+	`Registration_id` int primary key auto_increment,
+    `patient_id` varchar(20),
+    `Registration_date` timestamp default current_timestamp,
+    `doctor_id` varchar(20),
+    `already` bool,
+    foreign key(`doctor_id`) references `doctor`(`doctor_id`) on delete cascade,
+	foreign key(`patient_id`) references `patient`(`patient_id`) on delete cascade
+);
+    
+2023-07-02 10:19:09,957 ERROR   : 参数：None
+2023-07-02 10:19:09,985 ERROR   : 数据库执行失败：
+    insert into `title` values('主任医师','400'),('副主任医师','200'),('主治医师','100'),('住院医师','50');
+    
+2023-07-02 10:19:09,985 ERROR   : 参数：None
+2023-07-02 10:22:12,483 ERROR   : 数据库执行失败：
+        create table `title`(
+            `title` varchar(10) primary key,
+            `fee` int 
+        )
+        
+2023-07-02 10:22:12,483 ERROR   : 参数：None
+2023-07-02 10:22:12,500 ERROR   : 数据库执行失败：create table `doctor`(
+        `doctor_id` VARCHAR(20) primary key,
+        `doctor_name` VARCHAR(20),
+        `doctor_title` varchar(20),
+        `doctor_fee` INT,
+        `doctor_dept` varchar(20),
+        `doctor_pwd` varchar(100)
+    );
+        
+2023-07-02 10:22:12,500 ERROR   : 参数：None
+2023-07-02 10:22:12,514 ERROR   : 数据库执行失败：
+create table `patient`(
+	`patient_id` VARCHAR(20) primary key,
+    `patient_name` varchar(20),
+    `patient_idnumber` varchar(20),
+    `patient_telephone` varchar(20),
+    `patient_money` INT default 500,
+    `patient_pwd` varchar(100)
+);
+        
+2023-07-02 10:22:12,514 ERROR   : 参数：None
+2023-07-02 10:22:12,529 ERROR   : 数据库执行失败：
+create table `pharmacy`(
+	`pharmacy_id` int primary key auto_increment,
+    `pharmacy_name` varchar(20)
+);
+    
+2023-07-02 10:22:12,530 ERROR   : 参数：None
+2023-07-02 10:22:12,546 ERROR   : 数据库执行失败：
+create table `medicine`(
+	`pharmacy_id` int ,
+    `medicine_id` varchar(20) PRIMARY KEY,
+    `medicine_name` varchar(20),
+    `medicine_price` int,
+    `medicine_stock` int,
+    foreign key(`pharmacy_id`) references `pharmacy`(`pharmacy_id`) on delete cascade
+);
+    
+2023-07-02 10:22:12,546 ERROR   : 参数：None
+2023-07-02 10:22:12,562 ERROR   : 数据库执行失败：
+CREATE TABLE `medical_orders` (
+  `medical_ordersid` INT PRIMARY KEY auto_increment,
+  `medicine_id` varchar(20),
+  `patient_id` varchar(20),
+  `text` TEXT,
+  `doctor_id` varchar(20) NOT NULL,
+  `order_date` timestamp default current_timestamp
+);
+    
+2023-07-02 10:22:12,562 ERROR   : 参数：None
+2023-07-02 10:22:12,578 ERROR   : 数据库执行失败：
+create table `registration_form`(
+	`Registration_id` int primary key auto_increment,
+    `patient_id` varchar(20),
+    `Registration_date` timestamp default current_timestamp,
+    `doctor_id` varchar(20),
+    `already` bool,
+    foreign key(`doctor_id`) references `doctor`(`doctor_id`) on delete cascade,
+	foreign key(`patient_id`) references `patient`(`patient_id`) on delete cascade
+);
+    
+2023-07-02 10:22:12,578 ERROR   : 参数：None
+2023-07-02 10:22:12,623 ERROR   : 数据库执行失败：
+    insert into `title` values('主任医师','400'),('副主任医师','200'),('主治医师','100'),('住院医师','50');
+    
+2023-07-02 10:22:12,623 ERROR   : 参数：None
