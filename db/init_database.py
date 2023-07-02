@@ -24,8 +24,8 @@ def _init_database():
         `doctor_name` VARCHAR(20),
         `doctor_title` varchar(20),
         `doctor_fee` INT,
-        `doctor_dept` varchar(20),
-        `doctor_pwd` varchar(100)
+        `doctor_pwd` varchar(100),
+        `doctor_dept` varchar(20)
     );
         ''',
         '''

@@ -103,7 +103,7 @@ class loginDialog(QDialog, Ui_Dialog):
         elif find_user == 'no_user':
             QMessageBox.warning(self, "警告", "用户名不存在！")
         else:
-            if dbop.pwdEncryption(pwd) == find_user[0][5]:
+            if dbop.pwdEncryption(pwd) == find_user[0][4]:
                 QMessageBox.information(self, "提示", "欢迎%s医生登录！" % find_user[0][1])
                 curuser._init(usr, "doctor")
                 self.mainwindow = MainWindow()

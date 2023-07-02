@@ -86,7 +86,7 @@ def addDoctor(username, encrypt_pwd, name, title, dept):
     if result_name == "connect_error" or result_name == "execute_error":
         return result_name
     elif result_name == "no_user":
-        sql = "insert into `doctor` values(%(username)s,%(name)s,%(title)s,%(fee)s,%(dept)s,%(pwd)s)"
+        sql = "insert into `doctor` values(%(username)s,%(name)s,%(title)s,%(fee)s,%(pwd)s,%(dept)s)"
         params = {"username": username, "pwd": encrypt_pwd, "name": name, "title": title, "dept": dept, "fee": fee}
         result = db.execute(sql, params, commit=True)
         if result == "connect_error" or result == "execute_error":
