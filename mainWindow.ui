@@ -29,7 +29,6 @@
     </property>
     <addaction name="actionguahao_2"/>
     <addaction name="actionquyao"/>
-    <addaction name="actionadzhuyuanpat"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -37,7 +36,6 @@
     </property>
     <addaction name="actionjiaohao"/>
     <addaction name="actionkaiyao"/>
-    <addaction name="actionzhuyuandoc"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">

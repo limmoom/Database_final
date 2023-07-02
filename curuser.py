@@ -17,3 +17,10 @@ def getcurrentopt():
 
 def getuserid():
     return _global_dict[0]
+
+def uploadpatient(patientid):
+    global patient
+    patient = patientid
+
+def getpatientid():
+    return patient

@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Module implementing jiaohaoDialog.
+Module implementing docsubDialog.
 """
 
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget, QMessageBox, QTableWidgetItem
 
-from Ui_jiaohao import Ui_Form
-from db import dbop
 import curuser
+import dbop
+from Ui_docsub import Ui_Form
+from phdoc import phdocDialog
 
-
-class jiaohaoDialog(QWidget, Ui_Form):
+class docsubDialog(QWidget, Ui_Form):
     """
     Class documentation goes here.
     """
@@ -23,7 +23,7 @@ class jiaohaoDialog(QWidget, Ui_Form):
         @param parent reference to the parent widget
         @type QWidget
         """
-        super(jiaohaoDialog, self).__init__(parent)
+        super(docsubDialog, self).__init__(parent)
         self.setupUi(self)
         self.Init()
         self.currentpage = 1  # 当前页数
@@ -32,46 +32,39 @@ class jiaohaoDialog(QWidget, Ui_Form):
         self.load_patients()
         self.cnt_pages()
         self.tableWidget.setEditTriggers(self.tableWidget.NoEditTriggers)
-
     
     @pyqtSlot()
-    def on_pushButton_jiaohao_clicked(self):
+    def on_pushButton_search_clicked(self):
         """
-        叫号
+        Slot documentation goes here.
         """
-        patientid = self.tableWidget.item(self.currentrow, 0).text()
-        patientname = self.tableWidget.item(self.currentrow, 1).text()
-        regtime = self.tableWidget.item(self.currentrow, 2).text()
-        docid = curuser.getuserid()
-        res = QMessageBox.question(self, "确认", "确定叫%s患者号？"%patientname, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if res == QMessageBox.Yes:
-            jiaohao = dbop.jiaohao(docid, patientid, regtime)
-            if jiaohao == "connect_error":
-                QMessageBox.warning(self, "警告", "数据库连接失败")
-            elif jiaohao == "excute_error":
-                QMessageBox.warning(self, "警告", "数据库查询失败")
-            elif jiaohao == "already_jiaohao":
-                QMessageBox.warning(self, "提示", "叫号成功")
+        self.currentpage = 1
         self.showTablecontent()
+    
+    @pyqtSlot()
+    def on_pushButton_ph_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        curuser.uploadpatient(self.tableWidget.item(self.currentrow,0).text())
+        self.phdoc = phdocDialog()
+        self.phdoc.show()
+
 
     
-    @pyqtSlot(int, int)
+    @pyqtSlot(int,int)
     def on_tableWidget_cellClicked(self, row, column):
         """
         Slot documentation goes here.
-        
-        @param row DESCRIPTION
-        @type int
-        @param column DESCRIPTION
-        @type int
+
         """
-        self.pushButton_jiaohao.setEnabled(True)
         self.currentrow = row
+        self.pushButton_ph.setEnabled(True)
     
     @pyqtSlot()
     def on_pushButton_front_clicked(self):
         """
-        上一页
+        Slot documentation goes here.
         """
         self.currentpage -= 1
         if self.currentpage >= 1:
@@ -86,7 +79,7 @@ class jiaohaoDialog(QWidget, Ui_Form):
     @pyqtSlot()
     def on_pushButton_after_clicked(self):
         """
-        下一页
+        Slot documentation goes here.
         """
         self.currentpage += 1
         if self.currentpage <= self.totalpages:
@@ -127,17 +120,16 @@ class jiaohaoDialog(QWidget, Ui_Form):
             self.showTablecontent()
 
     def Init(self):
-        self.pushButton_jiaohao.setEnabled(False)
-        self.pushButton_skip.setEnabled(False)
-        self.pushButton_after.setEnabled(False)
+        opt = ["患者病历卡号","患者姓名", "患者身份证号"]
+        self.comboBox.addItems(opt)
         self.pushButton_front.setEnabled(False)
+        self.pushButton_after.setEnabled(False)
+        self.pushButton_skip.setEnabled(False)
+        self.pushButton_ph.setEnabled(False)
 
-    def cnt_pages(self):
-        '''
-        计算总页数
-        '''
+    def cnt_pages(self,options="", searchInfo=""):
         docid = curuser.getuserid()
-        page = dbop.totalpatPages(docid)
+        page = dbop.totalpatPages_already(docid, options, searchInfo)
         if page == "connect_error":
             QMessageBox.warning(self, "警告", "数据库连接失败")
             self.totalpages = 1
@@ -163,7 +155,7 @@ class jiaohaoDialog(QWidget, Ui_Form):
 
     def showTable(self, patientlist):
         """
-        显示未就诊病人列表
+        显示已就诊病人列表
         doctorlist: 数据库查询后返回的数据
         """
         self.tableWidget.clearContents()
@@ -197,22 +189,37 @@ class jiaohaoDialog(QWidget, Ui_Form):
         '''
         显示当前表格内容
         '''
-        self.cnt_pages()
-        self.label_cur.setText(str(self.currentpage))
-        self.label_sum.setText(str(self.totalpages))
-        currentPatientlist = dbop.listAllPatients((self.currentpage - 1) * 10, 10, curuser.getuserid())
-        if currentPatientlist == "connect_error":
-            QMessageBox.warning(self, "警告", "数据库连接失败")
-        elif currentPatientlist == "excute_error":
-            QMessageBox.warning(self, "警告", "数据库查询失败")
-        else:
-            self.showTable(currentPatientlist)
+        searchInfo = self.lineEdit.text()
+        options = self.comboBox.currentText()
+        if searchInfo:
+            if options:
+                self.cnt_pages(options, searchInfo)
+                self.label_cur.setText(str(self.currentpage))
+                self.label_sum.setText(str(self.totalpages))
+                currentPatientlist = dbop.listAllPatients_already((self.currentpage - 1) * 10, 10, curuser.getuserid(), options, searchInfo)
+                if currentPatientlist == "connect_error":
+                    QMessageBox.warning(self, "警告", "数据库连接失败")
+                elif currentPatientlist == "excute_error":
+                    QMessageBox.warning(self, "警告", "数据库查询失败")
+                else:
+                    self.showTable(currentPatientlist)
+        elif not searchInfo:
+            self.cnt_pages()
+            self.label_cur.setText(str(self.currentpage))
+            self.label_sum.setText(str(self.totalpages))
+            currentPatientlist = dbop.listAllPatients_already((self.currentpage - 1) * 10, 10, curuser.getuserid())
+            if currentPatientlist == "connect_error":
+                QMessageBox.warning(self, "警告", "数据库连接失败")
+            elif currentPatientlist == "excute_error":
+                QMessageBox.warning(self, "警告", "数据库查询失败")
+            else:
+                self.showTable(currentPatientlist)
 
     def load_patients(self):
         """
         加载第一页医生列表
         """
-        firstPage = dbop.listAllPatients(0, 10, curuser.getuserid())
+        firstPage = dbop.listAllPatients_already(0, 10, curuser.getuserid())
         if firstPage == "connect_error":
             QMessageBox.warning(self, "警告", "数据库连接失败")
         elif firstPage == "excute_error":

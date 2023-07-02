@@ -48,3 +48,21 @@
 2023-07-01 17:45:57,279 ERROR   : 参数：{'docid': '111', 'cur': 0, 'nxt': 10}
 2023-07-01 17:46:46,863 ERROR   : 数据库执行失败：select * from `registration_form` where doctor_id=%(docid)s limit %(cur)s, %(nxt)s and already = False
 2023-07-01 17:46:46,864 ERROR   : 参数：{'docid': '111', 'cur': 0, 'nxt': 10}
+2023-07-02 01:34:29,175 ERROR   : 数据库连接失败
+2023-07-02 01:34:29,182 ERROR   : 执行sql语句时，数据库连接失败
+2023-07-02 01:37:27,260 ERROR   : 数据库执行失败：select * from `registration_form` where doctor_id=%(docid)s and already= True and paient_id=%(id)s limit %(cur)s, %(nxt)s
+2023-07-02 01:37:27,260 ERROR   : 参数：{'docid': '111', 'id': '231', 'cur': 0, 'nxt': 10}
+2023-07-02 01:38:25,599 ERROR   : 数据库执行失败：select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id in %(id)s
+2023-07-02 01:38:25,599 ERROR   : 参数：{'docid': '111', 'id': '231'}
+2023-07-02 01:39:37,345 ERROR   : 数据库执行失败：select * from `registration_form` where doctor_id=%(docid)s and already= True and paient_id = %(id)s limit %(cur)s, %(nxt)s
+2023-07-02 01:39:37,345 ERROR   : 参数：{'docid': '111', 'id': '231', 'cur': 0, 'nxt': 10}
+2023-07-02 01:40:44,446 ERROR   : 数据库执行失败：select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id in (select patient_id from `patient` where patient_idcard=%(idcard)s)
+2023-07-02 01:40:44,446 ERROR   : 参数：{'docid': '111', 'idcard': '310xxxxxxxxxxxx'}
+2023-07-02 04:21:43,714 ERROR   : 数据库执行失败：insert into `medicial_orders` (`medicine_id`,`medicine_name`,`patient_id`,`text`,`doctor_id`) values (%(medid)s,%(medname)s,%(patid)s,%(text)s,%(docid)s)
+2023-07-02 04:21:43,720 ERROR   : 参数：{'medid': '003', 'medname': '测试药品3', 'patid': '2xx', 'text': '请输入医嘱', 'docid': '111'}
+2023-07-02 04:23:52,140 ERROR   : 数据库执行失败：insert into `medicial_orders` (`medicine_id`,`medicine_name`,`patient_id`,`text`,`doctor_id`) values (%(medid)s,%(medname)s,%(patid)s,%(text)s,%(docid)s)
+2023-07-02 04:23:52,140 ERROR   : 参数：{'medid': '002', 'medname': '测试药品2', 'patid': '2xx', 'text': '请输入医嘱', 'docid': '111'}
+2023-07-02 04:44:19,597 ERROR   : 数据库执行失败：select * from `medicial` where `medicine_id` = %(medid)s
+2023-07-02 04:44:19,601 ERROR   : 参数：{'medid': '002'}
+2023-07-02 04:44:38,125 ERROR   : 数据库执行失败：select * from `medicial` where `medicine_id` = %(medid)s
+2023-07-02 04:44:38,125 ERROR   : 参数：{'medid': '002'}

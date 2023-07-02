@@ -1,3 +1,4 @@
+import curuser
 import sharedata, dbClass
 import hashlib
 import datetime
@@ -209,3 +210,115 @@ def jiaohao(docid,patid,regdate):
     if result == "connect_error" or result == "execute_error":
         return result
     return "already_jiaohao"
+
+def listAllPatients_already(currentPage, numPage, docid, options="", searchInfo = ''):
+    result = []
+    if not options:
+        sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= True limit %(cur)s, %(nxt)s"
+        params1 = {"docid": docid, "cur": currentPage, "nxt": numPage}
+    elif options == '患者姓名':
+        sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= True and patient_id in (select patient_id from `patient` where patient_name = %(name)s) limit %(cur)s, %(nxt)s"
+        params1 = {"docid": docid, "name": searchInfo, "cur": currentPage, "nxt": numPage}
+    elif options == '患者病历卡号':
+        sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= True and patient_id = %(id)s limit %(cur)s, %(nxt)s"
+        params1 = {"docid": docid, "id": searchInfo, "cur": currentPage, "nxt": numPage}
+    elif options == '患者身份证号':
+        sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= True and patient_id in (select patient_id from `patient` where patient_idnumber = %(id)s) limit %(cur)s, %(nxt)s"
+        params1 = {"docid": docid, "id": searchInfo, "cur": currentPage, "nxt": numPage}
+
+    result1 = db.query(sql1, params1)
+    patientid = [i[1] for i in result1]
+    for i in range(len(patientid)):
+        sql2 = "select * from `patient` where patient_id=%(id)s"
+        params2 = {"id": patientid[i]}
+        result2 = db.query(sql2, params2)
+        result.append((result2[0][0], result2[0][1], result1[i][2], result2[0][2]))
+    return result
+
+
+def totalpatPages_already(docid,options,searchInfo):
+    if options == '患者姓名':
+        sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id in (select patient_id from `patient` where patient_name = %(name)s)"
+        params = {"docid": docid,"name":searchInfo}
+    elif options == '患者病历卡号':
+        sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id = %(id)s"
+        params = {"docid": docid,"id":searchInfo}
+    elif options == '患者身份证号':
+        sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True and patient_id in (select patient_id from `patient` where patient_idnumber = %(idcard)s)"
+        params = {"docid": docid,"idcard":searchInfo}
+    else:
+        sql = "select count(*) from `registration_form` where doctor_id=%(docid)s and already = True"
+        params = {"docid": docid}
+    result = db.query(sql, params)
+    return result
+
+def listAllmedicines(currentPage, numPage, options="", searchInfo=""):
+    '''
+    列出所有药品
+    :param currentPage: 当前页码
+    :param numPage: 总的页数
+    :param keyword: 关键词
+    :return:
+    '''
+    if options == '药品名':
+        sql = "select * from `medicine` where medicine_name = %(name)s limit %(cur)s, %(nxt)s"
+        params = {"name": searchInfo, "cur": currentPage, "nxt": numPage}
+    elif options == '药品编号':
+        sql = "select * from `medicine` where medicine_id = %(id)s limit %(cur)s, %(nxt)s"
+        params = {"id": searchInfo, "cur": currentPage, "nxt": numPage}
+    else:
+        sql = "select * from `medicine` limit %(cur)s, %(nxt)s"
+        params = {"cur": currentPage, "nxt": numPage}
+    result = db.query(sql, params)
+    return result
+
+def totalmedicinePages(options,searchInfo):
+    if options == '药品名':
+        sql = "select count(*) from `medicine` where medicine_name = %(name)s"
+        params = {"name": searchInfo}
+    elif options == '药品编号':
+        sql = "select count(*) from `medicine` where medicine_id = %(id)s"
+        params = {"id": searchInfo}
+    else:
+        sql = "select count(*) from `medicine`"
+        params = {}
+    result = db.query(sql, params)
+    return result
+
+def phconfirm(medid,info,docid):
+    params = {"medid": medid}
+    sql_pre = "select `medicine_stock` from `medicine` where `medicine_id` = %(medid)s"
+    stock = db.query(sql_pre,params)[0][0]
+    if stock > 0:
+        sql = "update `medicine` set `medicine_stock` = `medicine_stock` - 1 where `medicine_id` = %(medid)s"
+        db.execute(sql,params,commit=True)
+    else:
+        return "stock_error"
+    sql_nxt = "insert into `medicial_orders` (`medicine_id`,`patient_id`,`text`,`doctor_id`) values (%(medid)s,%(patid)s,%(text)s,%(docid)s)"
+    params_nxt = {"medid":medid,"patid":curuser.getpatientid(),"text":info,"docid":docid}
+    res = db.execute(sql_nxt,params_nxt,commit=True)
+    if res == "execute_error" or res == "connect_error":
+        return res
+    else:
+        return "success"
+
+def listAllPatMedicine(patid):
+    res = []
+    sql = "select * from `medicial_orders` where `patient_id` = %(patid)s"
+    params = {"patid":patid}
+    result = db.query(sql,params)
+    for order in result:
+        medid = order[1]
+        docid = order[4]
+        sql_med = "select * from `medicine` where `medicine_id` = %(medid)s"
+        params_med = {"medid":medid}
+        result_med = db.query(sql_med,params_med)
+        sql_doc = "select `doctor_name` from `doctor` where `doctor_id` = %(docid)s"
+        params_doc = {"docid":docid}
+        result_doc = db.query(sql_doc,params_doc)
+        phid = result_med[0][0]
+        sql_ph = "select `pharmacy_name` from `pharmacy` where `pharmacy_id` = %(phid)s"
+        params_ph = {"phid":phid}
+        result_ph = db.query(sql_ph,params_ph)
+        res.append((result_doc[0][0],docid,result_med[0][2],medid,result_med[0][3],result_ph[0][0],order[3],order[5]))
+    return res

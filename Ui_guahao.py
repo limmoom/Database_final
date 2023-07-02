@@ -25,8 +25,6 @@ class Ui_Form(object):
         self.comboBox = QtWidgets.QComboBox(Form)
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItem("")
-        self.comboBox.setItemText(0, "")
-        self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
@@ -101,10 +99,10 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.comboBox.setItemText(1, _translate("Form", "医生姓名"))
-        self.comboBox.setItemText(2, _translate("Form", "医生编号"))
-        self.comboBox.setItemText(3, _translate("Form", "医生科室"))
-        self.comboBox.setItemText(4, _translate("Form", "医生职称"))
+        self.comboBox.setItemText(0, _translate("Form", "医生姓名"))
+        self.comboBox.setItemText(1, _translate("Form", "医生编号"))
+        self.comboBox.setItemText(2, _translate("Form", "医生科室"))
+        self.comboBox.setItemText(3, _translate("Form", "医生职称"))
         self.pushButton_search.setText(_translate("Form", "搜索"))
         self.pushButton_guahao.setText(_translate("Form", "挂号"))
         item = self.tableWidget.horizontalHeaderItem(0)

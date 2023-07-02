@@ -202,7 +202,7 @@ class guahaoDialog(QWidget, Ui_Form):
                     QMessageBox.warning(self, "警告", "数据库查询失败")
                 else:
                     self.showTable(currentDoctorlist)
-        elif not (searchInfo) and not (options):         # 无搜索信息，无搜索选项
+        elif not (searchInfo):         # 无搜索信息，无搜索选项
             self.cnt_pages()
             self.label_cur.setText(str(self.currentpage))
             self.label_sum.setText(str(self.totalpages))
@@ -228,7 +228,7 @@ class guahaoDialog(QWidget, Ui_Form):
             QMessageBox.warning(self, "警告", "数据库查询失败")
             self.totalpages = 1
         elif page:
-            if page[0][0] % 11 == 0:
+            if page[0][0] % 10 == 0:
                 self.totalpages = page[0][0] // 10
             else:
                 self.totalpages = page[0][0] // 10 + 1

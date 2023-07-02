@@ -11,6 +11,8 @@ from PyQt5.QtWidgets import QMainWindow
 from Ui_mainWindow import Ui_MainWindow
 from jiaohao import jiaohaoDialog
 from guahao import guahaoDialog
+from docsub import docsubDialog
+from phpat import phpatDialog
 import curuser
 
 
@@ -42,16 +44,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
-        raise NotImplementedError
-    
-    @pyqtSlot()
-    def on_actionadzhuyuanpat_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        # TODO: not implemented yet
-        raise NotImplementedError
+        self.phpat = phpatDialog()
+        self.phpat.show()
+
     
     @pyqtSlot()
     def on_actionjiaohao_triggered(self):
@@ -65,18 +60,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def on_actionkaiyao_triggered(self):
         """
-        Slot documentation goes here.
+        医生开药
         """
-        # TODO: not implemented yet
-        raise NotImplementedError
-    
-    @pyqtSlot()
-    def on_actionzhuyuandoc_triggered(self):
-        """
-        Slot documentation goes here.
-        """
-        # TODO: not implemented yet
-        raise NotImplementedError
+        docsub = docsubDialog(self)
+        self.setCentralWidget(docsub)
+
 
     def InitUi(self):
         loginTime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
