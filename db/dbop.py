@@ -192,7 +192,7 @@ def listAllPatients(currentPage, numPage, docid):
     :return:
     '''
     result = []
-    sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already= False limit %(cur)s, %(nxt)s"
+    sql1 = "select * from `registration_form` where doctor_id=%(docid)s and already = False or already is null limit %(cur)s, %(nxt)s"
     params1 = {"docid": docid, "cur": currentPage, "nxt": numPage}
     result1 = db.query(sql1, params1)
     patientid = [i[1] for i in result1]
@@ -310,7 +310,7 @@ def phconfirm(medid, info, docid):
 
 def listAllPatMedicine(patid):
     res = []
-    sql = "select * from `medicial_orders` where `patient_id` = %(patid)s"
+    sql = "select * from `medical_orders` where `patient_id` = %(patid)s"
     params = {"patid": patid}
     result = db.query(sql, params)
     for order in result:
