@@ -299,7 +299,7 @@ def phconfirm(medid, info, docid):
         db.execute(sql, params, commit=True)
     else:
         return "stock_error"
-    sql_nxt = "insert into `medicial_orders` (`medicine_id`,`patient_id`,`text`,`doctor_id`) values (%(medid)s,%(patid)s,%(text)s,%(docid)s)"
+    sql_nxt = "insert into `medical_orders` (`medicine_id`,`patient_id`,`text`,`doctor_id`) values (%(medid)s,%(patid)s,%(text)s,%(docid)s)"
     params_nxt = {"medid": medid, "patid": curuser.getpatientid(), "text": info, "docid": docid}
     res = db.execute(sql_nxt, params_nxt, commit=True)
     if res == "execute_error" or res == "connect_error":
