@@ -80,7 +80,7 @@ create table `registration_form`(
     `patient_id` varchar(20),
     `Registration_date` timestamp default current_timestamp,
     `doctor_id` varchar(20),
-    `already` bool,
+    `already` bool default false,
     foreign key(`doctor_id`) references `doctor`(`doctor_id`) on delete cascade,
 	foreign key(`patient_id`) references `patient`(`patient_id`) on delete cascade
 );
